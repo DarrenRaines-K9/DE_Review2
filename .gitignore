@@ -1,0 +1,51 @@
+# Environment variables
+.env
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+duck_db/database.duckdb
+s3_duckdb/nppes_data.duckdb
+
+# dbt
+DBT/dbt_employee_project/target/
+DBT/dbt_employee_project/dbt_packages/
+DBT/dbt_employee_project/logs/
+DBT/dbt_employee_project/dbt_duckdb.duckdb

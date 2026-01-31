@@ -1,0 +1,30 @@
+{
+  "name": "Python Project",
+  "dockerComposeFile": "docker-compose.yml",
+  "service": "app",
+  "workspaceFolder": "/workspaces/app",
+  "runServices": ["app", "db", "rustfs"],
+
+  "features": {
+    "ghcr.io/devcontainers/features/aws-cli:1": {},
+    "ghcr.io/devcontainers/features/common-utils:2": {}
+  },
+
+  "mounts": [
+    "source=${localEnv:HOME}/.aws,target=/home/vscode/.aws,type=bind"
+  ],
+
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-python.python",
+        "mtxr.sqltools",
+        "mtxr.sqltools-driver-pg",
+        "mechatroner.rainbow-csv",
+        "anthropic.claude-code"
+      ]
+    }
+  },
+
+  "postCreateCommand": "pip install -r requirements.txt"
+}

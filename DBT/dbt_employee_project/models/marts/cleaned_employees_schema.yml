@@ -1,0 +1,38 @@
+version: 2
+
+models:
+  - name: cleaned_employees
+    description: "Cleaned employee data: no nulls, no duplicates, trimmed whitespace"
+    columns:
+      - name: id
+        description: "Unique employee identifier"
+        tests:
+          - unique
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_employees')
+                field: id
+
+      - name: name
+        description: "Employee full name (trimmed)"
+        tests:
+          - not_null
+
+      - name: department
+        description: "Department name (trimmed)"
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['Engineering', 'Marketing', 'Sales', 'HR', 'Finance']
+
+      - name: salary
+        description: "Annual salary in USD"
+        tests:
+          - not_null
+
+      - name: hire_date
+        description: "Hire date"
+        tests:
+          - not_null
