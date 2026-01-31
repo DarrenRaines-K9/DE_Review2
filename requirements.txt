@@ -6,3 +6,4 @@ polars
 duckdb
 pyarrow
 dbt-duckdb
+dbt-snowflake

@@ -1,0 +1,29 @@
+version: 2
+
+sources:
+  - name: raw
+    database: dbt_db
+    schema: public
+    tables:
+      - name: nppes_sample
+        description: Raw NPPES provider data loaded from S3
+
+models:
+  - name: stg_nppes_providers
+    description: Cleaned and standardized NPPES provider data
+    columns:
+      - name: provider_npi
+        description: National Provider Identifier (unique)
+        tests:
+          - unique
+          - not_null
+
+      - name: entity_type
+        description: Type of provider (Individual or Organization)
+        tests:
+          - accepted_values:
+              arguments:
+                values: ['Individual', 'Organization', 'Unknown']
+
+      - name: practice_state
+        description: State where provider practices

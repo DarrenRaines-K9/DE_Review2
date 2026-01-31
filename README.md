@@ -10,7 +10,7 @@ Second Self Assessment for Data Engineering
 
 - Manually add a file to s3, read it into memory using polars or pandas, and then write the data to dckdb (no temporary files, do not pull the data to a local file then upload, the data must stay in memory. Use a small file)
 
-## DBT:
+## DBT: ✅
 
 - Create a new dbt project in a repo
 - Find the profiles.yml file
@@ -47,3 +47,9 @@ Second Self Assessment for Data Engineering
 - Mount the folder that you need for sso
 - Verify that you can run sso inside of the dev container
 - Since Minio is in maintenance mode, look for a container image for rustFS and follow the directions to spin it up locally, add a file to it and query the file from psotgres
+
+## Snowflake: ✅
+
+- Create a user called dbt user, and add permissions to that user to that it can be used to connect to snowflake
+- In a python folder create a new dbt project and use the dbt snowflake adapter to connect to snowflake. 
+- You will test this by running dbt debug in the project and seeing all green checks. 

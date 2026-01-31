@@ -7,6 +7,7 @@ from rustfs.load_to_postgres import load_data
 from duck_db.setup import setup_duckdb
 from API.api_to_s3 import fetch_and_upload_pokemon_data
 from s3_duckdb.s3_to_duckdb import load_s3_to_duckdb
+from Snowflake.s3_to_snowflake import load_s3_to_snowflake
 
 load_dotenv()
 
@@ -58,6 +59,12 @@ def main():
         logger.info("=" * 60)
         load_s3_to_duckdb()
 
+        # Step 6: Load S3 CSV to Snowflake
+        logger.info("\n" + "=" * 60)
+        logger.info("STEP 6: Load S3 CSV to Snowflake")
+        logger.info("=" * 60)
+        load_s3_to_snowflake()
+
         logger.info("\n" + "=" * 60)
         logger.info("PIPELINE COMPLETED SUCCESSFULLY")
         logger.info("=" * 60)
@@ -65,6 +72,7 @@ def main():
         logger.info(f"Data loaded to 'products' table (DuckDB)")
         logger.info(f"Pokemon data uploaded to S3")
         logger.info(f"NPPES sample data loaded to DuckDB from S3")
+        logger.info(f"NPPES sample data loaded to Snowflake from S3")
         logger.info(f"Query using SQLTools in VSCode")
 
     except Exception as e:
