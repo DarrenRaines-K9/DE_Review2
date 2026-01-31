@@ -1,6 +1,6 @@
 # DE Review2
 
-Review 2 for Data Engineering
+Second Self Assessment for Data Engineering
 
 ## DuckDB: ✅
 
