@@ -9,16 +9,24 @@ from logger import logger
 load_dotenv()
 
 
-def load_s3_to_snowflake():
-    """Retrieve CSV from S3, load into memory with Polars, and write to Snowflake"""
+def load_s3_to_snowflake(filename, table_name, drop_if_exists=True):
+    """Retrieve CSV from S3, load into memory with Polars, and write to Snowflake
 
-    # Get S3 configuration
+    Args:
+        filename: Name of the CSV file in S3 (e.g., 'nppes_sample.csv')
+                  This file should be in the S3 bucket/prefix defined in your .env file
+        table_name: Name of the Snowflake table to create/insert into (e.g., 'NPPES_SAMPLE')
+                    Will be created if it doesn't exist
+        drop_if_exists: Whether to drop the table if it already exists (default: True)
+                        Set to False if you want to append to an existing table
+    """
+
+    # Get S3 configuration from environment variables
     aws_profile = os.getenv('AWS_PROFILE')
     s3_bucket = os.getenv('S3_BUCKET_NAME')
     s3_prefix = os.getenv('S3_FOLDER_PREFIX', '')
 
-    # Build S3 key
-    filename = 'nppes_sample.csv'
+    # Build S3 key using the provided filename parameter
     s3_key = f"{s3_prefix}/{filename}" if s3_prefix else filename
 
     # Download from S3 to memory
@@ -53,7 +61,8 @@ def load_s3_to_snowflake():
 
     # Clean column names for Snowflake
     df = df.rename({
-        col: col.replace(' ', '_').replace('(', '').replace(')', '').replace('.', '_')
+        col: col.replace(' ', '_').replace(
+            '(', '').replace(')', '').replace('.', '_')
         for col in df.columns
     })
 
@@ -79,10 +88,13 @@ def load_s3_to_snowflake():
                 break
         columns.append(f'"{col_name}" {sf_type}')
 
-    table_name = 'NPPES_SAMPLE'
+    # Use the table_name parameter passed to the function
+    # If drop_if_exists is True, drop the table before creating it
+    if drop_if_exists:
+        cursor.execute(f"DROP TABLE IF EXISTS {table_name}")
+        logger.info(f"Dropped table '{table_name}' if it existed")
 
-    # Create table
-    cursor.execute(f"DROP TABLE IF EXISTS {table_name}")
+    # Create table with the provided table_name
     create_sql = f"CREATE TABLE {table_name} ({', '.join(columns)})"
     cursor.execute(create_sql)
     logger.info(f"Created table '{table_name}'")
@@ -108,4 +120,15 @@ def load_s3_to_snowflake():
 
 
 if __name__ == "__main__":
-    load_s3_to_snowflake()
+    # Example 1: Load a single file
+    load_s3_to_snowflake('nppes_sample.csv', 'NPPES_SAMPLE')
+
+    # Example 2: Load multiple files in a loop
+    # Uncomment the code below to load multiple files
+    # files_to_load = [
+    #     ('file1.csv', 'TABLE1'),
+    #     ('file2.csv', 'TABLE2'),
+    #     ('file3.csv', 'TABLE3')
+    # ]
+    # for csv_file, table in files_to_load:
+    #     load_s3_to_snowflake(csv_file, table)

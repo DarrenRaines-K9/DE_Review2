@@ -33,13 +33,14 @@ def main():
         logger.info("\n" + "=" * 60)
         logger.info("STEP 1: Upload to RustFS")
         logger.info("=" * 60)
-        upload_data()
+        # Pass the local file path and S3 key name to the refactored function
+        upload_data('sample_data.csv', 'employee_data.csv')
 
         # Step 2: Load to PostgreSQL
         logger.info("\n" + "=" * 60)
         logger.info("STEP 2: Load to PostgreSQL")
         logger.info("=" * 60)
-        load_data()
+        load_data('employee_data.csv', 'employees')
 
         # Step 3: Setup DuckDB
         logger.info("\n" + "=" * 60)
@@ -57,13 +58,14 @@ def main():
         logger.info("\n" + "=" * 60)
         logger.info("STEP 5: Load S3 CSV to DuckDB")
         logger.info("=" * 60)
-        load_s3_to_duckdb()
+        load_s3_to_duckdb('nppes_sample.csv', 'nppes_sample')
 
         # Step 6: Load S3 CSV to Snowflake
         logger.info("\n" + "=" * 60)
         logger.info("STEP 6: Load S3 CSV to Snowflake")
         logger.info("=" * 60)
-        load_s3_to_snowflake()
+        # Pass the filename and table name as parameters to the refactored function
+        load_s3_to_snowflake('nppes_sample.csv', 'NPPES_SAMPLE')
 
         logger.info("\n" + "=" * 60)
         logger.info("PIPELINE COMPLETED SUCCESSFULLY")
